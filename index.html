@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
   <link rel="stylesheet" href="rarity.css"> <!-- Assuming rarity.css is in the same directory as your HTML file -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <title>Fortnite Shop Tracker</title>
-    <style>
+  <style>
     a {
       color: #16aaf2;
     }
@@ -21,8 +22,9 @@
     }
   </style>
 </head>
+
 <body>
-<header class="z-depth-1">
+  <header class="z-depth-1">
     <nav class="z-depth-0 backer-dark">
       <div class="nav-wrapper container">
         <ul class="left">
@@ -43,50 +45,57 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Function to show the toast
+    function showToast() {
+      M.toast({
+        html: 'Please use Epic Code TaborTime',
+        classes: 'rounded'
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Call the showToast function
+      showToast();
+
       fetch('https://fortnite-api.com/v2/shop/br')
         .then(response => response.json())
         .then(data => {
           const shopListContainer = document.getElementById('shop-list');
-          if (data.data.featured.entries.length >= 70) {
-            const sections = {};
+          const sections = {};
 
-            data.data.featured.entries.forEach(entry => {
-              entry.items.forEach(item => {
-                const sectionName = item.type.displayValue || 'Other';
-                if (!sections[sectionName]) {
-                  sections[sectionName] = [];
-                }
+          data.data.featured.entries.forEach(entry => {
+            entry.items.forEach(item => {
+              const sectionName = item.type.displayValue || 'Other';
+              if (!sections[sectionName]) {
+                sections[sectionName] = [];
+              }
 
-                const rarityClass = item.rarity ? item.rarity.displayValue.replace(/\s+/g, '-').toLowerCase() : 'common';
-                const dateAdded = moment(item.added).format('MMMM D, YYYY');
+              const rarityClass = item.rarity ? item.rarity.displayValue.replace(/\s+/g, '-').toLowerCase() : 'common';
 
-                const itemInfo = `<span class="title">${item.name}</span>
-                                 <p class="${rarityClass}">Rarity: ${item.rarity ? item.rarity.displayValue : 'N/A'}</p>
-                                 <p>Regular Price: ${entry.regularPrice}</p>
-                                 <p>Final Price: ${entry.finalPrice}</p>
-                                 <p>Date Added: ${dateAdded}</p>`;
+              const dateAdded = moment(item.added).format('MMMM D, YYYY');
 
-                sections[sectionName].push(itemInfo);
-              });
+              const itemInfo = `<span class="title">${item.name}</span>
+                                   <p class="${rarityClass}">Rarity: ${item.rarity ? item.rarity.displayValue : 'N/A'}</p>
+                                   <p>Regular Price: ${entry.regularPrice}</p>
+                                   <p>Final Price: ${entry.finalPrice}</p>
+                                   <p>Date Added: ${dateAdded}</p>`;
+
+              sections[sectionName].push(itemInfo);
             });
+          });
 
-            // Display sections
-            for (const sectionName in sections) {
-              const section = document.createElement('div');
-              section.className = 'section';
-              section.innerHTML = `<h4>${sectionName}</h4>
+          // Display sections
+          for (const sectionName in sections) {
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = `<h4>${sectionName}</h4>
                                    <ul class="collection">${sections[sectionName].map(item => `<li class="collection-item">${item}</li>`).join('')}</ul>`;
-              shopListContainer.appendChild(section);
-            }
-          } else {
-            const message = document.createElement('p');
-            message.textContent = 'Item shop has less than 70 entries. Tracking disabled.';
-            shopListContainer.appendChild(message);
+            shopListContainer.appendChild(section);
           }
         })
         .catch(error => console.error('Error fetching data:', error));
     });
   </script>
 </body>
+
 </html>
