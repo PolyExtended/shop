@@ -59,16 +59,12 @@
                 }
 
                 const rarityClass = item.rarity ? item.rarity.displayValue.replace(/\s+/g, '-').toLowerCase() : 'common';
-                const lastAppearance = entry.shopHistory && entry.shopHistory.length > 0
-                  ? moment(entry.shopHistory[entry.shopHistory.length - 1]).format('MMMM D, YYYY')
-                  : 'N/A';
                 const dateAdded = moment(item.added).format('MMMM D, YYYY');
 
                 const itemInfo = `<span class="title">${item.name}</span>
                                  <p class="${rarityClass}">Rarity: ${item.rarity ? item.rarity.displayValue : 'N/A'}</p>
                                  <p>Regular Price: ${entry.regularPrice}</p>
                                  <p>Final Price: ${entry.finalPrice}</p>
-                                 <p>Last in Shop: ${entry.shopHistory && entry.shopHistory.length > 0 ? lastAppearance : 'N/A'}</p>
                                  <p>Date Added: ${dateAdded}</p>`;
 
                 sections[sectionName].push(itemInfo);
