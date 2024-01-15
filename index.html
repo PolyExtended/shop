@@ -20,6 +20,24 @@
     .backer-dark {
       background: #0c99dd;
     }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .collection-item {
+      padding: 10px;
+    }
+
+    .title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 
@@ -38,14 +56,13 @@
     </nav>
   </header>
   <div class="container">
-    <h3>Fortnite Shop</h3>
+    <h3 class="center-align">Fortnite Shop</h3>
     <div id="shop-list"></div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-    // Function to show the toast
     function showToast() {
       M.toast({
         html: 'Please use Epic Code TaborTime',
@@ -54,7 +71,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      // Call the showToast function
       showToast();
 
       fetch('https://fortnite-api.com/v2/shop/br')
@@ -73,8 +89,10 @@
               const rarityClass = item.rarity ? item.rarity.displayValue.replace(/\s+/g, '-').toLowerCase() : 'common';
 
               const dateAdded = moment(item.added).format('MMMM D, YYYY');
+              const picture = `<img src="${item.images.icon}" class="${rarityClass}-border" alt="${item.name}">`;
 
               const itemInfo = `<span class="title">${item.name}</span>
+                                   ${picture}
                                    <p class="${rarityClass}">Rarity: ${item.rarity ? item.rarity.displayValue : 'N/A'}</p>
                                    <p>Regular Price: ${entry.regularPrice}</p>
                                    <p>Final Price: ${entry.finalPrice}</p>
@@ -84,7 +102,6 @@
             });
           });
 
-          // Display sections
           for (const sectionName in sections) {
             const section = document.createElement('div');
             section.className = 'section';
